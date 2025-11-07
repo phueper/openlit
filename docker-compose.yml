@@ -14,7 +14,10 @@ services:
     restart: always
 
   openlit:
-    image: ghcr.io/openlit/openlit:latest
+    image: openlit
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
     container_name: openlit
     environment:
       TELEMETRY_ENABLED: "true"
@@ -62,6 +65,25 @@ services:
     volumes:
       - ./assets/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     restart: always
+
+  otel-gpu-collector:
+    image: otel-gpu-collector
+    build:
+      context: ./otel-gpu-collector
+      dockerfile: dockerfile
+    container_name: otel-gpu-collector
+    environment:
+      GPU_APPLICATION_NAME: 'pq-ai1'
+      GPU_ENVIRONMENT: 'pq-ai1'
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"
+    depends_on:
+      - otel-collector
+    restart: always
+    devices:
+      - "/dev/kfd:/dev/kfd"
+      - "/dev/dri:/dev/dri"
+    group_add:
+      - video
 
 volumes:
   clickhouse-data:

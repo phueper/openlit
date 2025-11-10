@@ -72,7 +72,13 @@ services:
       context: ./otel-gpu-collector
       dockerfile: dockerfile
     container_name: otel-gpu-collector
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./otel-gpu-collector:/usr/src/app
+      - ./sdk/python/src:/usr/src/openlit
     environment:
+      PYTHONPATH: /usr/src/openlit
       GPU_APPLICATION_NAME: 'pq-ai1'
       GPU_ENVIRONMENT: 'pq-ai1'
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4318"

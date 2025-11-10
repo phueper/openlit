@@ -265,12 +265,21 @@ class GPUInstrumentor(BaseInstrumentor):
                                 ]
                                 // 1000.0
                             )
+                    except amdsmi.amdsmi_exception.AmdSmiLibraryException as e:
+                        logger.warning(
+                            "Error collecting metric %s for AMD GPU %d: %s, %s",
+                            metric_name,
+                            amdsmi.amdsmi_get_xgmi_info(device_handle)["index"],
+                            e.get_error_info(),
+                            e
+                        )
                     except Exception as e:
                         logger.error(
                             "Error collecting metric %s for AMD GPU %d: %s",
                             metric_name,
                             amdsmi.amdsmi_get_xgmi_info(device_handle)["index"],
                             e,
+                            exc_info=e,
                         )
                     return 0
 

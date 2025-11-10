@@ -81,14 +81,18 @@ class GPUInstrumentor(BaseInstrumentor):
 
             pynvml.nvmlInit()
             return "nvidia"
-        except Exception:
-            try:
-                import amdsmi
+        except Exception as e:
+            logger.debug('Error initializing pynvml: %s', e)
+        try:
+            import amdsmi
 
-                amdsmi.amdsmi_init()
-                return "amd"
-            except Exception:
-                return None
+            amdsmi.amdsmi_init()
+            return "amd"
+        except Exception as e:
+            logger.debug('Error initializing amdsmi: %s', e)
+
+        logger.warning('failed to initialize either nvidia or amd GPU.')
+        return None
 
     def _collect_metric(
         self, environment, application_name, metric_name, options: CallbackOptions

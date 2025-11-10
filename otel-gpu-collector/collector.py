@@ -7,6 +7,8 @@ import signal
 import time
 from threading import Event
 
+import pydevd_pycharm
+# pydevd_pycharm.settrace('host.docker.internal', port=45575, stdout_to_server=True, stderr_to_server=True)
 
 # Create a JSON logger
 class JSONFormatter(logging.Formatter):
@@ -51,6 +53,12 @@ def setup_logger(application_name, environment):
 
     # Add context filter to logger
     logger.addFilter(ContextFilter(application_name, environment))
+
+    logging.basicConfig(format='%(asctime)s %(pathname)s:%(lineno)s %(name)s %(levelname)-8s %(message)s')
+    logging.getLogger('openlit').setLevel(logging.DEBUG)
+    logging.getLogger('opentelemetry').setLevel(logging.DEBUG)
+    # logging.getLogger().setLevel(logging.DEBUG)
+    # logging.getLogger().addHandler(handler)
 
     return logger
 

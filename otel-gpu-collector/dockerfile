@@ -11,10 +11,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-dev \
     libffi-dev \
     libssl-dev \
-    amd-smi \
-    libamd-smi-dev \
+    wget \
+    && wget https://repo.radeon.com/amdgpu-install/7.1/ubuntu/noble/amdgpu-install_7.1.70100-1_all.deb \
+    && apt-get -y install ./amdgpu-install_7.1.70100-1_all.deb \
+    && rm amdgpu-install_7.1.70100-1_all.deb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN amdgpu-install --usecase=rocm -y
+
+RUN cd /opt/rocm/share/amd_smi \
+    && python3 -m pip install --upgrade pip \
+    && python3 -m pip install --user .
 
 # Install necessary Python packages
 RUN pip install --no-cache-dir --no-binary :psutil: psutil nvidia-ml-py openlit

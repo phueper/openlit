@@ -24,7 +24,8 @@ RUN cd /opt/rocm/share/amd_smi \
     && python3 -m pip install --user .
 
 # Install necessary Python packages
-RUN pip install --no-cache-dir --no-binary :psutil: psutil nvidia-ml-py openlit
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose any required ports, if necessary
 EXPOSE 80

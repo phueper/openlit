@@ -81,8 +81,11 @@ def main():
 
         # Initialize OpenLit with provided parameters
         logger.info("Initializing GPU OpenTelemetry Instrumentation library OpenLIT")
+
+        # let's collect system metrics and not "only" GPU
         openlit.init(
-            collect_gpu_stats=True,
+            # collect_gpu_stats=True,
+            collect_system_metrics=True,
             application_name=application_name,
             environment=environment,
         )

@@ -295,7 +295,7 @@ class GPUInstrumentor(BaseInstrumentor):
                     SemanticConvention.GPU_UUID: amdsmi.amdsmi_get_gpu_asic_info(
                         device_handle
                     )["market_name"],
-                    SemanticConvention.GPU_NAME: amdsmi.amdsmi_get_device_name(
+                    SemanticConvention.GPU_NAME: amdsmi.amdsmi_get_gpu_subsystem_name(
                         device_handle
                     ),
                 }
